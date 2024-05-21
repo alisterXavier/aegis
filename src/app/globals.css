@@ -6,28 +6,63 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --green: #3cb371;
+  --dpurple: #4bd2ee;
+  --blue: #16729b;
+  --blue-light: #16739b29;
+  /* --bg: #1f1f29; */
+  --bg: #141519;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+  background-color: var(--bg);
+}
+.my-shadowed-path {
+  box-shadow: inset 0px 0px 20px #fa1593, 0px 0px 2rem #fa1593;
+}
+.login-input > div:after {
+  background-color: var(--green) !important;
+}
+.login-header {
+  color: #3cb371;
+  /* position: relative;
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    90deg,
+    rgba(60, 179, 113, 1) 62%,
+    rgba(0, 0, 0, 1) 95%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
 }
 
+.effect {
+  clip: rect(0, auto, auto, 0);
+  /* object-position: bottom; */
+}
+@font-face {
+  font-family: 'Blaa1';
+  src: url('../../public/AstroSpace.otf');
+}
+.astro-font {
+  font-family: 'Blaa1';
+}
+#gradient-canvas {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  --gradient-color-1: #1a2847;
+  --gradient-color-2: #1f1935;
+  --gradient-color-3: #211038;
+  --gradient-color-4: #201b32;
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.test-try {
+  word-spacing: 700px;
+  display: table-caption;
 }
