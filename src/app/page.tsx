@@ -1,15 +1,13 @@
 'use client';
-import { FloatingNav } from '@/app/components/floating-navbar';
-import { EvervaultCard } from './components/evervault-card';
+import { FloatingNav, EvervaultCard, Para, TracingBeam } from './components';
 import { Button } from '@nextui-org/react';
-import { Para } from './components/character-fade';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import kenway from '../../public/images/Kenway.jpg';
-import { TracingBeam } from './components/tracing';
 import gsap from 'gsap';
 import SplitType from 'split-type';
+import Login from './components/login';
 
 const testParas = [
   {
@@ -24,26 +22,31 @@ const testParas = [
 ];
 
 export default function Home() {
+  const [toggleLogin, setToggleLogin] = useState<boolean>(false);
+  const handleLogin = (x: boolean) => {
+    setToggleLogin(x);
+  };
   return (
     <div className="">
       <FloatingNav>
         <Button
-          className="bg-[var(--blue)] text-white absolute z-[1000] right-10 top-5"
+          className="bg-[var(--blue)] text-white absolute z-[90]"
           radius="sm"
+          onClick={() => handleLogin(true)}
         >
           Login
         </Button>
       </FloatingNav>
       <EvervaultCard>
-        <div className="w-[70%] flex justify-center items-center flex-col z-9">
+        <div className="w-full md:w-[70%] flex justify-center items-center flex-col z-9">
           <div className="w-[100%] flex justify-center items-center flex-col p-5">
             <div className="w-full">
-              <h1 className="text-3xl md:text-5xl font-semibold text-center text-[var(--blue)] astro-font">
+              <h1 className="hero-title text-4xl md:text-7xl font-semibold text-center text-[var(--blue-light)] astro-font">
                 Unlock Seamless Security with Aegis
               </h1>
             </div>
             <div className="w-[80%]">
-              <p className="text-md md:text-[20px] text-center text-white">
+              <p className="hero-sub text-md md:text-xl text-center text-white">
                 Streamline SSL/TLS certificate management and installation for a
                 worry-free web experience.
               </p>
@@ -52,28 +55,35 @@ export default function Home() {
           {/* <Button className=''>Get Started</Button> */}
         </div>
       </EvervaultCard>
-      <div className="px-5 md:px-10 second-container">
-        <div className="h-screen flex items-center">
-          <div className="w-[90%]">
-            <Para
-              className="md:text-5xl text-2xl w-[100%] md:w-[60%]"
-              parent="second-container"
-            />
-            <p className="text-white text-sm md:text-md">
-              Expired certificates leads to more time managing certificates,
-              potentially leading to a 42% higher chance of security breaches.
-            </p>
-          </div>
-        </div>
-        <TracingBeam className="px-6">
-          <ThirdSection />
-        </TracingBeam>
-      </div>
+      <SecondSection />
       <FourthSection />
+
+      {toggleLogin && <Login setToggleLogin={handleLogin} />}
     </div>
   );
 }
 
+const SecondSection = () => {
+  return (
+    <div className="px-5 md:px-10 second-container">
+      <div className="h-screen flex items-center">
+        <div className="w-[90%]">
+          <Para
+            className=" md:text-5xl text-3xl w-[100%] md:w-[60%]"
+            parent="second-container"
+          />
+          <p className="text-white text-sm md:text-md">
+            Expired certificates leads to more time managing certificates,
+            potentially leading to a 42% higher chance of security breaches.
+          </p>
+        </div>
+      </div>
+      <TracingBeam className="px-6">
+        <ThirdSection />
+      </TracingBeam>
+    </div>
+  );
+};
 const ThirdSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const AppImages = ({ children }: { children: React.ReactNode }) => {
@@ -157,15 +167,17 @@ const ThirdSection = () => {
       >
         <motion.div
           ref={ref}
-          className={`absolute w-full md:w-[30%] top-[50%] -translate-y-[50%]
+          className={`absolute w-full md:w-[30%] bottom-20 md:top-[50%] md:-translate-y-[50%]
           ${
-            index % 2 === 0 ? 'left-0  justify-start' : 'right-0  justify-end'
+            index % 2 === 0
+              ? 'md:left-0  md:justify-start'
+              : 'md:right-0  md:justify-end'
           }  z-[11] flex`}
         >
           <p
-            className={`test-try flex flex-col w-fit md:w-[600px] ${
-              index % 2 === 0 ? 'text-end' : 'text-start'
-            } text-2xl md:text-5xl text-white`}
+            className={`md:table-caption md:[word-spacing:700px] w-full md:w-[600px] ${
+              index % 2 === 0 ? 'md:text-end' : 'md:text-start'
+            } text-2xl md:text-5xl text-white text-center`}
             ref={txtRef}
           >
             {header}
@@ -236,12 +248,10 @@ const FourthSection = () => {
           trigger: '.fourth-container',
           start: 'top 100%',
           scrub: true,
-          markers: true,
         };
         const pulseTimeline = gsap.timeline({
           repeat: -1,
-          repeatDelay: 2,
-          onComplete: () => ScrollTrigger.refresh(),
+          repeatDelay: 1,
         });
         pulseTimeline
           .from('.grid-item.active', {
@@ -284,7 +294,7 @@ const FourthSection = () => {
             stagger: {
               grid: [itemsPerColumn, itemsPerRow],
               each: 0.1,
-              from: 15,
+              from: Math.floor(itemsPerRow / 2),
             },
             duration: 1,
             scrollTrigger: scrollTriggerConfig,
@@ -302,7 +312,7 @@ const FourthSection = () => {
             scrollTrigger: {
               trigger: '.fourth-container',
               start: 'top 100%',
-              end: 'bottom 100%',
+              end: 'bottom 50%',
               scrub: 1,
             },
           }
@@ -355,15 +365,15 @@ const FourthSection = () => {
   return (
     <div className="relative fourth-container h-[100vh] overflow-hidden z-100">
       <div className="relative inner-container h-[100%] flex justify-center items-center">
-        <p className="relative try-title astro-font text-white text-2xl md:text-7xl">
+        <p className="relative try-title astro-font text-white text-[40px] md:text-8xl">
           Try
           <span className="cursor-pointer transition-all hover:text-[var(--blue)] mx-2">
             Aegis
           </span>
           for free
-          <motion.span className="bg-gradient-to-b from-transparent title-shadow-height h-[100px] from-5% to-[var(--bg)] to-70% bottom-0 left-0 right-0 block z-[10] absolute" />
-          <motion.span className="bg-gradient-to-l from-transparent title-shadow-width from-5% to-[var(--bg)] to-70%  top-0 bottom-0 w-[100px]  left-0 block z-[10] absolute" />
-          <motion.span className="bg-gradient-to-r from-transparent from-5% title-shadow-width to-[var(--bg)] to-70%  top-0 bottom-0 right-0 w-[100px] block z-[10] absolute" />
+          <span className="bg-gradient-to-b from-transparent title-shadow-height h-[100px] from-5% to-[var(--bg)] to-70% bottom-0 left-0 right-0 block z-[10] absolute" />
+          <span className="bg-gradient-to-l from-transparent title-shadow-width from-5% to-[var(--bg)] to-70%  top-0 bottom-0 w-[100px] -left-10 block z-[10] absolute" />
+          <span className="bg-gradient-to-r from-transparent from-5% title-shadow-width to-[var(--bg)] to-70%  top-0 bottom-0 -right-10 w-[100px] block z-[10] absolute" />
         </p>
       </div>
       <div className="absolute h-screen grid-container top-0 left-0 right-0 bottom-0 grid grid-cols-[repeat(auto-fit,_minmax(50px,_1fr))] grid-rows-[repeat(auto-fit,_minmax(50px,_1fr))] z-10">
@@ -373,7 +383,8 @@ const FourthSection = () => {
               key={i}
               className="active grid-item relative
               border-[transparent] border 
-              before:content-[''] before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:shadow-[1px_10px_70px_black] bg-[var(--bg)] before:z-[1]
+              shadow-[1px_10px_70px_black] 
+              before:content-[''] before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 bg-[var(--bg)] before:z-[1]
               "
             >
               <span></span>

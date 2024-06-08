@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
-import { UserCol } from '@/utils';
+import { encryptKey, UserCol } from '@/utils/server';
 
 export async function POST(req) {
-  const data = await req.json();
-
-  const user = UserCol.insertOne({
-    email: data.email,
+  const { email, password } = await req.json();
+  const { encodedEncryptedPrivateKey, encodedSalt } = encryptKey({
+    key: password,
+  });
+  const user = await UserCol.insertOne({
+    email,
+    password: {
+      encodedEncryptedPrivateKey,
+      encodedSalt,
+    },
+    privKey: 'typewriter',
     certificates_issued: [],
   });
-
-  NextResponse.json(user);
+  return NextResponse.json(user);
 }
